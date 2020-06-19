@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>恶意URL检测系统</title>
+<meta name="description" content="Demo of A Free Coming Soon Bootstrap 4 Template"/>
+<link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+<link href="../static/css/font-awesome.min.css" rel="stylesheet">
+<link href="../static/css/main.css" rel="stylesheet">
+<script src="../static/js/jquery-3.4.1.min.js"></script>
+<script src="../static/js/popper.min.js"></script>
+<script src="../static/js/main.js"></script>
+<script type="text/javascript">
+	var data= {};
+	judge=function (x){
+		if(x==""){
+			alert("输入不能为空");
+			return 0;
+		}
+		else{
+			return 1;
+		}
+	}
+	sendmessage=function (){
+		var x=$("#url").val();
+		var a=judge(x);
+		if(x==0){
+			return false;
+		}
+		else{
+		data["url"]=x;
+		$("#loading").css('display','block');
+    	$.ajax({
+                    type: 'POST',
+                    url:"/",
+                    data:JSON.stringify(data),  //转化字符串 
+                    contentType:'application/json; charset=UTF-8',
+                    dataType: 'json',
+                    success:function(data){ //成功的话，得到消息
+                    	$("#loading").css('display','none');
+                        $("form").css('display','none');
+                        $("#result").css('display','table');
+                        $("#resultleft").css('display','table-cell');
+                        $("#resultright").css('display','table-cell');
+                        $("#resultbottom").css('display','block');
+                        $("#showurl").text(data.url);
+                        document.getElementById('inline').contentWindow.location.reload(true);
+                        if(data.evil==0){
+                        	$("#showresult").css("color","green");
+                        	$("#showresult").html("<b>正常URL</b>");
+                        }
+                        if(data.evil==1){
+                        	$("#showresult").css("color","red");
+                        	$("#showresult").html("<b>恶意URL</b>");
+                        }
+                        if(data.phish==1){
+                        	$("#showphish").css("color","red");
+                        	$("#showphish").html("<b>是</b>");
+                        }
+                        if(data.phish==0){
+                        	$("#showphish").css("color","green");
+                        	$("#showphish").html("<b>否</b>");
+                        }
+                        if(data.ip){
+                        	$("#showip").html(data.ip);
+                        }
+                        if(data.area){
+                        	$("#showarea").html(data.area);
+                        }
+                    }
+    			});
+    	}
+	}
+	back=function(){
+		$("#result").css('display','none');
+		$("#resultbottom").css('display','none');
+		$("form").css('display','block');
+		$("#url").val("");
+	}
+</script>
+</head>
+<body id="top"><div class="site-wrapper">
+<div class="site-wrapper-inner">
+<div class="cover-container">
+<br>  
+ <div class="inner cover">
+	<h1 class="cover-heading">恶意URL检测系统</h1>
+	<form class="lead" action="/" method="post" onsubmit="return false">
+		<input type="text" class="form-control form-long" placeholder="请输入需要检测的URL" id="url">
+		<br>
+		<input type="button" value="提交" class="btn btn-lg btn-default btn-add" id="button1" onclick="sendmessage();">
+	</form>
+	<div class="loading" id="loading">
+		加载中......
+	</div>	
+	<div class="lead result" style="display:none;" id="result">
+		<div id="resultleft" style="display:none;vertical-align: middle;">
+			<p><span>检测URL</span>:<br><span id="showurl" style="word-wrap:break-word;width:600px;word-break:normal;white-space:pre-wrap;display:-moz-inline-box;
+display:inline-block;"></span></p>
+			<p><span>检测结果</span>:<span id="showresult"></span></p>
+			<!--这是单行注释-<p><span>是否出现在phishtank数据库中</span>:<span id="showphish"></span></p>-->
+			<p id="ip"><span>IP地址</span>:<span id="showip"></span></p>
+			<p id="area"><span>IP所在地区</span>:<span id="showarea"></span></p>
+		</div>
+		<div id="resultright" style="display:none;vertical-align: middle;">
+			<p>恶意URL可能性评估</p>
+			<iframe src="../static/test.html" width="450" height="250" frameborder="0" id="inline" scrolling="no"></iframe>
+		</div>
+	</div>
+	<div class="lead" id="resultbottom" style="display:none;">
+			<input type="button" value="返回检测" class="btn btn-lg btn-default btn-add" id="button2" onclick="back();">
+	</div>
+  </div>
+</div>
+</div>
+</body>
+</html>

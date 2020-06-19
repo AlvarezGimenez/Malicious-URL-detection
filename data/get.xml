@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<response>
+		<meta>
+			<timestamp>2020-04-02T07:18:49+00:00</timestamp>
+			<serverid>7af7df93</serverid>
+			<requestid>172.31.99.221.5e8591d94819c4.21815026</requestid>
+		</meta>
+		<results>
+			<url0>
+				<url><![CDATA[https://milhas-janeiro2020.com.br/]]></url>
+				<in_database>true</in_database>
+				<phish_id>6358962</phish_id>
+				<phish_detail_page><![CDATA[http://www.phishtank.com/phish_detail.php?phish_id=6358962]]></phish_detail_page>
+				<verified>true</verified>
+				<verified_at>2020-01-16T02:14:52+00:00</verified_at>
+				<valid>true</valid>
+			</url0>
+		</results>
+	</response>
